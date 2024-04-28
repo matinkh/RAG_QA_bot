@@ -1,2 +1,3 @@
 argparse
 langchain
+pre-commit

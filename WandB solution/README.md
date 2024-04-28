@@ -4,7 +4,7 @@ See todo.txt for the actual plan.
 ---
 ---
 
-## 
+##
 
 * Difficulty in visualizing and inspecting the execution flow of LLMs
 * Challenges in debugging LLM chains and prompts
@@ -39,6 +39,3 @@ For summarization
    1. Summarize each token. (`map_prompt_template`)
    2. Summarize the summarizations of the tokens into one nice summary. (`combine_prompt_template`)
 3. **Summarization** takes a long time. But QA will be much faster.
-
-
-
