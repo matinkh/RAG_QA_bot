@@ -1,3 +1,16 @@
+accelerate
 argparse
+bitsandbytes
+faiss-cpu
+faiss-gpu
+huggingface_hub
 langchain
+langchain_community
+peft
 pre-commit
+pypdf
+scipy
+sentence-transformers
+torch
+transformers==4.35
+trl
