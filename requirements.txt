@@ -2,7 +2,7 @@ accelerate
 argparse
 bitsandbytes
 faiss-cpu
-faiss-gpu
+#faiss-gpu  # not available on macOs
 huggingface_hub
 langchain
 langchain_community

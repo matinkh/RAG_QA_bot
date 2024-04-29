@@ -12,8 +12,8 @@ from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_community.llms import HuggingFacePipeline
 from langchain_community.vectorstores import FAISS
 from transformers import (
-  AutoTokenizer, 
-  AutoModelForCausalLM, 
+  AutoTokenizer,
+  AutoModelForCausalLM,
   BitsAndBytesConfig,
   pipeline
 )
@@ -56,7 +56,7 @@ class OnlineQaRag:
             file_path = os.path.join(folder, file)
             loader = doc_loader(file_path)
             documents.extend(loader.load())
-        
+
         # Split the documents into chunks
         text_splitter = CharacterTextSplitter(chunk_size=CHUNK_SIZE, chunk_overlap=CHUNK_OVERLAP)
         chunked_documents = text_splitter.split_documents(documents)
@@ -74,10 +74,10 @@ class OnlineQaRag:
         # Setup vector store
         self._db = FAISS.from_documents(chunked_documents, embedding_model)
         self.retriever = self._db.as_retriever(search_type="similarity", search_kwargs={"k": 10})
-        
+
         toc = time.time()
         print(f"Vector DB initialized for {folder} in {(toc-tic):.2f}")
-    
+
     def _initialize_model(self):
         compute_dtype = getattr(torch, "float16")
         bnb_config = BitsAndBytesConfig(
@@ -89,7 +89,7 @@ class OnlineQaRag:
 
         self.model = AutoModelForCausalLM.from_pretrained(MODEL_NAME,
                                                           quantization_config=bnb_config)
-        
+
     def _initialize_tokenizer(self):
         tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME, trust_remote_code=True)
         tokenizer.pad_token = tokenizer.eos_token
@@ -102,6 +102,7 @@ class OnlineQaRag:
             tokenizer=self.tokenizer,
             task="text-generation",
             temperature=TEMPERATURE,
+            do_sample=True,
             repetition_penalty=1.1,
             return_full_text=True,
             max_new_tokens=1000,
@@ -126,10 +127,10 @@ class OnlineQaRag:
             template=self.prompt_template,
         )
 
-        # Create llm chain 
+        # Create llm chain
         llm_chain = LLMChain(llm=self.llm, prompt=prompt)
 
-        rag_chain = ( 
+        rag_chain = (
         {"context": self.retriever, "question": RunnablePassthrough()}
             | llm_chain
         )
