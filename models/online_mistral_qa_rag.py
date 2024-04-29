@@ -1,3 +1,11 @@
+"""
+This is an online QA RAG, meaning data and query processing happen at the same time.
+Config:
+    - Vector DB: FAISS
+    - Embedding Model: all-mpnet-base-v2
+    - LLM: Mistral-7B-Instruct-v0.1
+"""
+
 import os
 import time
 import torch
@@ -26,7 +34,7 @@ TEMPERATURE=0.2
 ACCEPTED_FILETYPES = {"pdf": PyPDFLoader}
 
 
-class OnlineQaRag:
+class OnlineMistralQaRag:
     """
     This RAG receives the context as the first step and initializes its vector store, before answering the user's queries.
     It uses an in-memory vector and needs to be initialized before every use.
@@ -76,7 +84,7 @@ class OnlineQaRag:
         self.retriever = self._db.as_retriever(search_type="similarity", search_kwargs={"k": 10})
 
         toc = time.time()
-        print(f"Vector DB initialized for {folder} in {(toc-tic):.2f}")
+        print(f"Vector DB initialized for {folder} in {(toc-tic):.2f} seconds.")
 
     def _initialize_model(self):
         compute_dtype = getattr(torch, "float16")

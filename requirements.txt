@@ -6,6 +6,7 @@ faiss-cpu
 huggingface_hub
 langchain
 langchain_community
+openai
 peft
 pre-commit
 pypdf
